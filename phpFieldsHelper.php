@@ -25,8 +25,8 @@ class phpFieldsHelper {
      *
      * @return string
      */
-    public function input($class=false, $label=false, $name=false, $id=false, $placeholder=false, $default_value=false) {
-        $attribute = $this->escape_attributes($class, $label, $name, $id, $placeholder, $default_value);
+    public function text($class=false, $label=false, $name=false, $id=false, $placeholder=false, $default_value=false) {
+        $attribute = $this->escape_attributes($class, $label, $name, $id, $default_value, $placeholder);
 
         $container     = "<div class='$attribute[class]'>";
         $label_string  = "<label for='$attribute[id]'>$attribute[label]</label>";
@@ -87,8 +87,6 @@ class phpFieldsHelper {
         $end_textarea  = "</textarea>";
         $end_container = "</div>";
 
-
-
         return($container.$label_string.$textarea.$attribute['value'].$end_textarea.$end_container);
     }
 
@@ -109,7 +107,16 @@ class phpFieldsHelper {
             $class = $this->field_class;
         }
 
-        //Use a random string (uniqueid and str_shuffle to add randomness) if id is not set
+        //if id is not set but name is, id get same value as name
+        if(!$id && $name) {
+            $id = $name;
+        }
+        //viceversa
+        elseif (!$name && $id) {
+            $name = $id;
+        }
+
+        //Use a random string (uniqueid and str_shuffle to add randomness) if id is still empty
         if(!$id) {
             $id = str_shuffle(uniqid('', true));
         }

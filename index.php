@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>
 
 require_once 'phpFieldsHelper.php';
 
-$inputs = new phpFieldsHelper('input-container');
+$input = new phpFieldsHelper('input-container');
 
 //a default value for Last Name (e.g. a value from a DB)
 $last_name = 'Doe';
@@ -49,16 +49,12 @@ Proin in viverra urna, ut sollicitudin lorem. Donec pretium elit et metus faucib
 amet nisi commodo iaculis. In hac habitasse platea dictumst. Sed fermentum purus id turpis ultricies, eget sollicitudin 
 lacus interdum. Cras volutpat molestie congue. Mauris imperdiet volutpat urna et viverra.';
 
-echo $inputs->input(false, 'First Name', 'first_name', 'first_name', 'What\'s your name?');
-echo $inputs->input(false, 'Last Name',  'last_name',  'last_name',  '', $last_name);
+echo $input->text(false, 'First Name', 'first_name', 'first_name', 'What\'s your name?');
+echo $input->text(false, 'Last Name',  'last_name',  'last_name',  '', $last_name);
 
-echo $inputs->select(false, 'Language', $lan_array, 'language', 'language', 'English (UK)');
+echo $input->select(false, 'Language', $lan_array, 'language', 'language', 'English (UK)');
 
-
-echo $inputs->textArea('custom-textarea', 'label', '', '', $textarea_text);
-
-
-echo $end_container = '</div>';
+echo $input->textArea('custom-textarea', 'label', '', '', $textarea_text);
 
 ?>
 
