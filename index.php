@@ -43,18 +43,28 @@ $lan_array = [
     'es_ES'     => 'Español'
 ];
 
+$radio_array = [
+    'small'     => 'Small',
+    'medium'    => 'Medium',
+    'large'     => 'Large',
+];
+
 $textarea_text = ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut ornare quam quis erat faucibus porttitor. 
 Proin erat orci, sagittis eu placerat vitae, condimentum ac lectus. Phasellus pulvinar lectus eu sem auctor aliquam. 
 Proin in viverra urna, ut sollicitudin lorem. Donec pretium elit et metus faucibus mattis. Proin sollicitudin sapien sit 
 amet nisi commodo iaculis. In hac habitasse platea dictumst. Sed fermentum purus id turpis ultricies, eget sollicitudin 
 lacus interdum. Cras volutpat molestie congue. Mauris imperdiet volutpat urna et viverra.';
 
-echo $input->text(false, 'First Name', 'first_name', 'first_name', 'What\'s your name?');
-echo $input->text(false, 'Last Name',  'last_name',  'last_name',  '', $last_name);
+echo phpFieldsHelper::text(false, 'First Name', 'first_name', 'first_name', 'What\'s your name?');
+echo phpFieldsHelper::text(false, 'Last Name',  'last_name',  'last_name',  '', $last_name);
 
-echo $input->select(false, 'Language', $lan_array, 'language', 'language', 'English (UK)');
+echo '<br />';
 
-echo $input->textArea('custom-textarea', 'label', '', '', $textarea_text);
+echo phpFieldsHelper::radio('Select Size',false, $radio_array, false, 'medium');
+
+echo phpFieldsHelper::select(false, 'Language', $lan_array, 'language', 'language', 'English (UK)');
+
+echo phpFieldsHelper::textArea('custom-textarea', 'label', '', '', $textarea_text);
 
 ?>
 
