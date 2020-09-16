@@ -28,10 +28,12 @@ class phpFieldsHelper {
      */
 
     public static function radio($title=false, $class=false, $options=[], $name=false, $default_value=false, $id=false) {
+
         $attribute = self::escape_attributes($class, $title, $name, $id, $default_value, false );
         $radio_options = self::escape_array($options);
 
         $title_string = '';
+
         if($attribute['title']) {
             $title_string .= '<strong>' . $attribute['title'] . '</strong><br />';
         }
@@ -45,9 +47,9 @@ class phpFieldsHelper {
                 //checked is defined
                 $checked = '';
 
-                //If db_value === false, there is no need to check for db value
-                //so checked is the medium star (i.e. ranking page)
-                if ($attribute['value'] === $value) {
+                //escape_attributes use htmlspecialchars that always return a string, so control must be weak
+                /** @noinspection TypeUnsafeComparisonInspection */
+                if ($attribute['value'] == $value) {
                     $checked = 'checked';
                 }
 
@@ -60,17 +62,17 @@ class phpFieldsHelper {
                     '<div>
                         <label for="%s">
                             <input type="radio"
-                                  name="%s"
-                                  value="%s"
-                                  class="%s"
-                                  id="%s"
-                                  %s
+                                name="%s"
+                                value="%s"
+                                class="%s"
+                                id="%s"
+                                %s
                             >
                             %s
                         </label>
                     </div>',
                     $id_string, $attribute['name'], $value, $attribute['class'], $id_string, $checked,
-                    ucwords( $radio_label )
+                    ucfirst( $radio_label )
                 );
 
             } //end foreach
@@ -173,9 +175,11 @@ class phpFieldsHelper {
         //defalt value
         $title_or_label = 'label';
 
-        if($caller === 'radio' && !$name) {
-            $name = 'radio_group';
+        if($caller === 'radio') {
             $title_or_label = 'title';
+            if(!$name) {
+                $name = 'radio_group';
+            }
         }
 
         //Use the self::field_class attribute if $class is false or empty
