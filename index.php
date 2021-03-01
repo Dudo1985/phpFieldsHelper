@@ -108,7 +108,8 @@ echo phpFieldsHelper::textArea(
     '',                   //textarea name
     '',                      //textarea id
     $textarea_text,              //placeholder
-    ''              //default text to appear into the textarea
+    '',              //default text to appear into the textarea
+    'on'
 );
 
 ?>

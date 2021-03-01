@@ -31,12 +31,15 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
          * @param bool|string     $name              name attribute for radio
          * @param bool|string|int $default_value     default selected value
          * @param bool|string     $id                prefix for id attribute
+         * @param string          $autocomplete
+
          *
          * @return string
          */
 
         public static function radio(
-            $title = false, $class = false, $options = [], $name = false, $default_value = false, $id = false
+            $title = false, $class = false, $options = [], $name = false, $default_value = false, $id = false,
+            $autocomplete = 'off'
         ) {
 
             $attribute     = self::escape_attributes($class, $title, $name, $id, $default_value);
@@ -76,13 +79,14 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
                                     value="%s"
                                     class="%s"
                                     id="%s"
+                                    autocomplete="%s"
                                     %s
                                 >
                                 %s
                             </label>
                         </div>',
-                        $id_string, $attribute['name'], $value, $attribute['class'], $id_string, $checked,
-                        ucfirst($radio_label)
+                        $id_string, $attribute['name'], $value, $attribute['class'], $id_string, $autocomplete,
+                        $checked, ucfirst($radio_label)
                     );
 
                 } //end foreach
@@ -106,18 +110,20 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
          * @param bool|string|int $id             attribute id   for input field
          * @param bool|string|int $placeholder    attribute placeholder for input field
          * @param bool|string|int $default_value  attribute value for input field
+         * @param string          $autocomplete
          *
          * @return string
          */
         public static function text(
-            $class = false, $label = false, $name = false, $id = false, $placeholder = false, $default_value = false
+            $class = false, $label = false, $name = false, $id = false, $placeholder = false, $default_value = false,
+            $autocomplete='off'
         ) {
             $attribute = self::escape_attributes($class, $label, $name, $id, $default_value, $placeholder);
 
             $container     = "<div class='$attribute[class]'>";
             $label_string  = "<label for='$attribute[id]'>$attribute[label]</label>";
             $input_text    = "<input type='text' name='$attribute[name]' id='$attribute[id]' value='$attribute[value]'
-                            placeholder='$attribute[placeholder]'>";
+                            placeholder='$attribute[placeholder]' autocomplete='$autocomplete'>";
             $end_container = "</div>";
 
             return ($container . $label_string . $input_text . $end_container);
@@ -139,18 +145,20 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
          * @param bool|string|int $name              name attribute for select
          * @param bool|string|int $id                id attribute for select
          * @param bool|string|int $default_value     default value to show
+         * @param string          $autocomplete
          *
          * @return string
          */
         public static function select(
-            $class = false, $label = false, $options = [], $name = false, $id = false, $default_value = false
+            $class = false, $label = false, $options = [], $name = false, $id = false, $default_value = false,
+            $autocomplete = 'off'
         ) {
             $attribute      = self::escape_attributes($class, $label, $name, $id, $default_value);
             $select_options = self::escape_array($options);
 
             $container     = "<div class='$attribute[class]'>";
             $label_string  = "<label for='$attribute[id]'>$attribute[label]</label>";
-            $select        = "<select name='$attribute[name]' id='$attribute[id]'>";
+            $select        = "<select name='$attribute[name]' id='$attribute[id]' autocomplete=$autocomplete>";
             $end_select    = "</select>";
             $end_container = "</div>";
 
@@ -180,17 +188,22 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
          * @param bool|string|int $id               id attribute for textarea
          * @param bool|string|int $placeholder      textarea placeholder
          * @param bool|string|int $default_value    default text to appear into the textarea
+         * @param string          $autocomplete
          *
          * @return string
          */
         public static function textArea(
-            $class = false, $label = false, $name = false, $id = false, $placeholder = false, $default_value = false
+            $class = false, $label = false, $name = false, $id = false, $placeholder = false, $default_value = false,
+            $autocomplete = 'off'
         ) {
             $attribute = self::escape_attributes($class, $label, $name, $id, $default_value, $placeholder);
 
             $container     = "<div class='$attribute[class]'>";
             $label_string  = "<label for='$attribute[id]'>$attribute[label]</label>";
-            $textarea      = "<textarea name='$attribute[name]' id='$attribute[id]' placeholder='$attribute[placeholder]'>";
+            $textarea      = "<textarea name='$attribute[name]' 
+                                id='$attribute[id]' 
+                                placeholder='$attribute[placeholder]'
+                                autocomplete=$autocomplete>";
             $end_textarea  = "</textarea>";
             $end_container = "</div>";
 
@@ -203,13 +216,15 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
          * @param bool|string|int $label
          * @param bool|string|int $name
          * @param bool|string|int $id
-         * @param bool|string|int $placeholder
          * @param bool|string|int $default_value
+         * @param bool|string|int $placeholder
+         * @param string          $autocomplete
          *
          * @return array
          */
         private static function escape_attributes(
-            $class = false, $label = false, $name = false, $id = false, $default_value = false, $placeholder = false
+            $class = false, $label = false, $name = false, $id = false, $default_value = false, $placeholder = false,
+            $autocomplete = 'off'
         ) {
 
             $dbt    = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
@@ -239,9 +254,13 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
                 $name = $id;
             }
 
-            //Use a random string (uniqid and str_shuffle to add randomness) if id is still empty
+            //Use a random string (uniqueid and str_shuffle to add randomness) if id is still empty
             if (!$id) {
                 $id = str_shuffle(uniqid());
+            }
+
+            if($autocomplete !== 'on') {
+                $autocomplete = 'off';
             }
 
             return array(
@@ -251,6 +270,7 @@ if (!class_exists('YasrPhpFieldsHelper') ) {
                 'name'          => htmlspecialchars($name, ENT_QUOTES),
                 'placeholder'   => htmlspecialchars($placeholder, ENT_QUOTES),
                 'value'         => htmlspecialchars($default_value, ENT_QUOTES),
+                'autocomplete'  => $autocomplete,
             );
         }
 
