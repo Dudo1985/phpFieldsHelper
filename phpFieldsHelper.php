@@ -1,6 +1,6 @@
 <?php
 
-if (!class_exists('YasrPhpFieldsHelper') ) {
+if (!class_exists('PhpFieldsHelper') ) {
 
     class phpFieldsHelper {
         /**
